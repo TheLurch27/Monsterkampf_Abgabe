@@ -2,7 +2,7 @@
 
 namespace Monsterkampf_Simulator_Abgabe
 {
-    public class Monster
+    public class HeadOfState
     {
         private float hp;
         private float ap;
@@ -10,7 +10,7 @@ namespace Monsterkampf_Simulator_Abgabe
         private float speed;
         private string race;
 
-        public Monster(float hp, float ap, float dp, float speed, string race)
+        public HeadOfState(float hp, float ap, float dp, float speed, string race)
         {
             this.hp = hp;
             this.ap = ap;
@@ -19,7 +19,7 @@ namespace Monsterkampf_Simulator_Abgabe
             this.race = race;
         }
 
-        public void Attack(Monster target)
+        public void Attack(HeadOfState target)
         {
             float damage = this.ap - target.dp;
             damage = Math.Max(0, damage);

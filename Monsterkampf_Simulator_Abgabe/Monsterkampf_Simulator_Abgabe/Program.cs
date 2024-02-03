@@ -1,54 +1,53 @@
-﻿namespace Monsterkampf_Simulator_Abgabe
+﻿using System;
+using System.Collections.Generic;
+
+namespace Monsterkampf_Simulator_Abgabe
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Monster Battle Simulator!");
+            Console.WriteLine("WELCOME TO HEAD OF STATE BATTLE SIMULATOR!");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Press a button to continue");
+            Console.WriteLine("Press any key to continue");
             Console.ForegroundColor = ConsoleColor.White;
             Console.ReadKey();
             Console.Clear();
 
-            Console.WriteLine("In this game, you will create two monsters and watch them fight.");
+            Console.WriteLine("In this game, you will create a battle between two heads of government from European countries.");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("Press a button to continue");
+            Console.WriteLine("Press any key to continue");
             Console.ForegroundColor = ConsoleColor.White;
             Console.ReadKey();
             Console.Clear();
 
-            Console.WriteLine("Let's create the ");
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("first ");
+            Console.WriteLine("Let's create the first head of state:");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("monster:");
             Console.WriteLine();
-            Monster monster1 = CreateMonster();
+            HeadOfState monster1 = CreateHeadOfState(null, null);
+            Console.Clear(); // Hier wird die Konsole gelöscht, nachdem das erste Staatsoberhaupt ausgewählt wurde
             Console.ReadKey();
-            Console.Clear();
 
-            Console.Write("Now, let's create the ");
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write("second ");
+            Console.WriteLine("Now, let's create the second head of state:");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("monster:");
-            Console.WriteLine();
-            Monster monster2 = CreateMonster();
-            Console.ReadKey();
-            Console.Clear();
+            Console.WriteLine("");
+            HeadOfState monster2 = CreateHeadOfState(monster1, null);
+            Console.WriteLine("");
+
 
             while (monster1.GetRace() == monster2.GetRace())
             {
                 Console.Clear();
-                Console.WriteLine("Please select different races for the monsters.");
-                Console.WriteLine("Now, let's create the second monster:");
-                monster2 = CreateMonster();
+                Console.WriteLine("Please select different heads of state.");
+                Console.WriteLine("Now, let's create the second head of state:");
+                monster2 = CreateHeadOfState(monster1, null);
             }
 
-            Monster firstAttacker, secondAttacker;
+            HeadOfState firstAttacker, secondAttacker;
             if (monster1.GetSpeed() >= monster2.GetSpeed())
             {
                 firstAttacker = monster1;
@@ -60,7 +59,7 @@
                 secondAttacker = monster1;
             }
 
-            Console.WriteLine("The battle begins!");
+            Console.WriteLine("DING DING DING... The battle begins!");
 
             int rounds = 0;
             while (monster1.IsAlive() && monster2.IsAlive())
@@ -82,85 +81,137 @@
                 Console.WriteLine($"{monster2.GetRace()} wins after {rounds} rounds!");
             }
 
-            Console.WriteLine("Thank you for playing Monster Battle Simulator!");
-            Console.WriteLine("Press any key to exit.");
+            Console.WriteLine("Thank you for playing THE HEAD OF STATE BATTLE SIMULATOR!");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Press any key to exit the game");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.ReadKey();
         }
 
-        static Monster CreateMonster()
+        static HeadOfState CreateHeadOfState(HeadOfState otherHeadOfState1, HeadOfState otherHeadOfState2)
         {
-            float hp, ap, dp, speed;
             string race;
+            int hp, ap, dp, speed;
 
-            Console.WriteLine("Enter monster race (1 = Ork, 2 = Troll, 3 = Goblin):");
-            int raceInput;
-            while (!int.TryParse(Console.ReadLine(), out raceInput) || raceInput < 1 || raceInput > 3)
+            Console.Clear();
+            Console.WriteLine("Select the head of state:");
+
+            // Available races
+            List<string> availableHeadOfState = new List<string>
             {
-                Console.Clear();
-                Console.WriteLine("Invalid input! Please enter a number between 1 and 3 for race.");
-                Console.ReadKey();
-                Console.Clear();
-                Console.WriteLine("Enter monster race (1 = Ork, 2 = Troll, 3 = Goblin):");
+                "Olaf Scholz (Germany)",
+                "Emmanuel Macron (France)",
+                "Giorgia Menoni (Italy)",
+                "Aljaksandr Lukaschenko (Belarus)",
+                "King Philippe (Belgium)",
+                "King Frederik X (Denmark)",
+                "Sauli Niinistö (Finland)",
+                "Katerina Sakellaropoulou (Greece)",
+                "Zoran Milanović (Croatia)",
+                "Prince Hans-Adam II. (Liechtenstein)",
+                "Grand Duke Henri (Luxembourg)",
+                "Prince Albert II. (Monaco)",
+                "King Willem-Alexander (Netherlands)",
+                "King Harald V. (Norway)",
+                "Alexander Van der Bellen (Austria)",
+                "Andrzej Duda (Poland)",
+                "Marcelo Rebelo de Sousa (Portugal)",
+                "Wladimir Putin (Russia)",
+                "Carl XVI. Gustaf (Sweden)",
+                "Viola Amherd (Switzerland)",
+                "King Felipe VI. (Spain)",
+                "Petr Pavel (Czech Republic)",
+                "Wolodymyr Selenskyj (Ukraine)",
+                "Pope Francis (Vatican City)",
+                "König Charles III. (United Kingdom)"
+            };
+
+            // Remove already selected races
+            if (otherHeadOfState1 != null)
+            {
+                availableHeadOfState.Remove(otherHeadOfState1.GetRace());
+            }
+            if (otherHeadOfState2 != null)
+            {
+                availableHeadOfState.Remove(otherHeadOfState2.GetRace());
             }
 
-            race = raceInput == 1 ? "Ork" : raceInput == 2 ? "Troll" : "Goblin";
+            // Display available races with interactive selection
+            int selectedIndex = 0;
+            while (true)
+            {
+                Console.Clear();
+                for (int i = 0; i < availableHeadOfState.Count; i++)
+                {
+                    if (i == selectedIndex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    Console.WriteLine(availableHeadOfState[i]);
+                    Console.ResetColor();
+                }
 
-            Console.WriteLine("Enter monster attributes:");
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.Key == ConsoleKey.UpArrow)
+                {
+                    selectedIndex = (selectedIndex - 1 + availableHeadOfState.Count) % availableHeadOfState.Count;
+                }
+                else if (key.Key == ConsoleKey.DownArrow)
+                {
+                    selectedIndex = (selectedIndex + 1) % availableHeadOfState.Count;
+                }
+                else if (key.Key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+            }
+
+            race = availableHeadOfState[selectedIndex];
+
+            Console.WriteLine("Enter head of state attributes:");
+
             Console.Write("HP (1-100): ");
-            while (!float.TryParse(Console.ReadLine(), out hp) || hp < 1 || hp > 100)
+            while (!int.TryParse(Console.ReadLine(), out hp) || hp < 1 || hp > 100)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid input! Please enter a number between 1 and 100 for HP.");
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("Press a button to continue");
+                Console.WriteLine("Invalid input! Please enter a whole number between 1 and 100 for HP.");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Enter monster attributes:");
                 Console.Write("HP (1-100): ");
             }
 
             Console.Write("AP (1-100): ");
-            while (!float.TryParse(Console.ReadLine(), out ap) || ap < 1 || ap > 100)
+            while (!int.TryParse(Console.ReadLine(), out ap) || ap < 1 || ap > 100)
             {
                 Console.Clear();
-                Console.WriteLine("Invalid input! Please enter a number between 1 and 100 for AP.");
-                Console.WriteLine("Enter monster attributes:");
-                Console.Write("HP (1-100): ");
-                Console.WriteLine($"Race: {race}");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input! Please enter a whole number between 1 and 100 for AP.");
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("AP (1-100): ");
             }
 
             Console.Write("DP (1-100): ");
-            while (!float.TryParse(Console.ReadLine(), out dp) || dp < 1 || dp > 100)
+            while (!int.TryParse(Console.ReadLine(), out dp) || dp < 1 || dp > 100)
             {
                 Console.Clear();
-                Console.WriteLine("Invalid input! Please enter a number between 1 and 100 for DP.");
-                Console.Clear();
-                Console.WriteLine("Enter monster attributes:");
-                Console.Write("HP (1-100): ");
-                Console.WriteLine($"Race: {race}");
-                Console.Write("AP (1-100): ");
-                Console.WriteLine($"Race: {race}");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input! Please enter a whole number between 1 and 100 for DP.");
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("DP (1-100): ");
             }
 
             Console.Write("Speed (1-100): ");
-            while (!float.TryParse(Console.ReadLine(), out speed) || speed < 1 || speed > 100)
+            while (!int.TryParse(Console.ReadLine(), out speed) || speed < 1 || speed > 100)
             {
                 Console.Clear();
-                Console.WriteLine("Invalid input! Please enter a number between 1 and 100 for Speed.");
-                Console.WriteLine("Enter monster attributes:");
-                Console.Write("HP (1-100): ");
-                Console.WriteLine($"Race: {race}");
-                Console.Write("AP (1-100): ");
-                Console.WriteLine($"Race: {race}");
-                Console.Write("DP (1-100): ");
-                Console.WriteLine($"Race: {race}");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input! Please enter a whole number between 1 and 100 for Speed.");
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("Speed (1-100): ");
             }
 
-            return new Monster(hp, ap, dp, speed, race);
+            return new HeadOfState(hp, ap, dp, speed, race);
         }
     }
 }
