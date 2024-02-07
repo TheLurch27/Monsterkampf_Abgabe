@@ -28,8 +28,7 @@ namespace Monsterkampf_Simulator_Abgabe
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
             HeadOfState monster1 = CreateHeadOfState(null, null);
-            Console.Clear(); // Hier wird die Konsole gelöscht, nachdem das erste Staatsoberhaupt ausgewählt wurde
-            Console.ReadKey();
+            Console.Clear();
 
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Now, let's create the second head of state:");
@@ -102,7 +101,7 @@ namespace Monsterkampf_Simulator_Abgabe
             {
                 "Olaf Scholz (Germany)",
                 "Emmanuel Macron (France)",
-                "Giorgia Menoni (Italy)",
+                "Giorgia Meloni (Italy)",
                 "Aljaksandr Lukaschenko (Belarus)",
                 "King Philippe (Belgium)",
                 "King Frederik X (Denmark)",
@@ -131,10 +130,12 @@ namespace Monsterkampf_Simulator_Abgabe
             if (otherHeadOfState1 != null)
             {
                 availableHeadOfState.Remove(otherHeadOfState1.GetRace());
+                Console.Clear();
             }
             if (otherHeadOfState2 != null)
             {
                 availableHeadOfState.Remove(otherHeadOfState2.GetRace());
+                Console.Clear();
             }
 
             // Display available races with interactive selection
@@ -169,6 +170,7 @@ namespace Monsterkampf_Simulator_Abgabe
 
             race = availableHeadOfState[selectedIndex];
 
+            Console.Clear();
             Console.WriteLine("Enter head of state attributes:");
 
             Console.Write("HP (1-100): ");
